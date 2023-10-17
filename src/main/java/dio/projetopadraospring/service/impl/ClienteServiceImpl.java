@@ -7,6 +7,7 @@ import dio.projetopadraospring.repository.EnderecoRepository;
 import dio.projetopadraospring.service.ClienteService;
 import dio.projetopadraospring.service.ViaCepService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,8 +29,11 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente buscarPorId(Integer id) {
+    public Cliente buscarPorId(Integer id) throws ChangeSetPersister.NotFoundException {
         Optional<Cliente> cliente = clienteRepository.findById(id);
+        if( cliente == null) {
+            throw new ChangeSetPersister.NotFoundException();
+        }
         return cliente.get();
     }
 
